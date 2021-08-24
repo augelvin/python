@@ -1,0 +1,90 @@
+# make an empty grid
+grid = [[' ', ' ', ' '],
+        [' ', ' ', ' '],
+        [' ', ' ', ' ']]
+
+# function to see transposed grid    
+def transpose(grid):
+    global transposed
+    transposed = [[grid[0][0], grid[1][0], grid[2][0]],
+                [grid[0][1], grid[1][1], grid[2][1]],
+                [grid[0][2], grid[1][2], grid[2][2]]]
+
+# transposing grid to be checked               
+transpose(grid)
+
+# function to see diagonals       
+def diag(grid):
+    global diagonal
+    diagonal = [[grid[0][0], grid[1][1], grid[2][2]],
+                [grid[0][2], grid[1][1], grid[2][0]]]
+
+# grid diagonals to be checked            
+diag(grid)
+
+# function to print board
+def print_board(grid):
+    print('---------')
+    print('|', grid[0][0], grid[0][1], grid[0][2], '|')
+    print('|', grid[1][0], grid[1][1], grid[1][2], '|')
+    print('|', grid[2][0], grid[2][1], grid[2][2], '|')
+    print('---------')
+
+# print initial board  
+print_board(grid)
+
+turn = 0
+
+# funciton to ask for coordinates and make it a list of integers
+def ask_coordinates():
+    global coordinates
+    string_coordinates = input('Enter the coordinates: ').split()
+    coordinates = [int(x) for x in string_coordinates]
+
+# game is not finished
+game = True
+
+while game == True:
+    
+    available = False
+
+    while available == False:
+        ask_coordinates()
+        
+        # check the input
+        if type(coordinates[0 or 1]) is not int:
+            print('You should enter numbers!')
+            break
+        elif coordinates[0] > 3 or coordinates[1] > 3 or coordinates[0] < 1 or coordinates[1] < 1:
+            print('Coordinates should be from 1 to 3!')
+            break
+        elif grid[coordinates[0]-1][coordinates[1]-1] != ' ':
+            print('This cell is occupied! Choose another one!')
+            break
+        elif grid[coordinates[0]-1][coordinates[1]-1] == ' ': 
+            if turn % 2 == 0:
+                grid[coordinates[0]-1][coordinates[1]-1] = 'X'
+                transpose(grid)
+                diag(grid)
+            elif turn % 2 == 1:
+                grid[coordinates[0]-1][coordinates[1]-1] = 'O'
+                transpose(grid)
+                diag(grid)
+            available == True
+            turn += 1
+            print_board(grid)
+    
+    # defining win conditions
+    x_win = ['X', 'X', 'X'] in grid or ['X', 'X', 'X'] in transposed or ['X', 'X', 'X'] in diagonal
+    o_win = ['O', 'O', 'O'] in grid or ['O', 'O', 'O'] in transposed or ['O', 'O', 'O'] in diagonal
+    
+    # checking for a win or a draw
+    if x_win == True:
+        print("X wins")
+        game = False
+    elif o_win == True:
+        print("O wins")
+        game = False
+    elif turn == 9:
+        print('Draw')
+        game = False
